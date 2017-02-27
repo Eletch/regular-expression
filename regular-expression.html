@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"> 
+    <title>JS Regular Expression</title>
+    <link rel="stylesheet" href="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container" style="margin-top:100px;">
+      <form id="phoneNum" action="" >
+        <div class="regexp-phoneNum" style="width:500px;height:100px;">
+          判断输入手机号是否合法：<input type="text" placeholder="输入一个手机号">
+          <input type="submit" class="btn btn-info" value="OK">
+          <br/>
+          <span id="resultP"></span>
+        </div> 
+      </form>
+
+      <form id="repitition" action="">
+        <div class="regexp-repitition" style="width:500px;height:100px;">
+          判断输入是否有相邻重复单词：<input type="text" placeholder="输入至少两个单词">
+          <input type="submit" class="btn btn-info" value="OK">
+          <br/>
+          <span id="resultR"></span>
+        </div>
+      </form>
+    </div>
+
+    <script type="text/javascript">
+
+      document.getElementById('phoneNum').onsubmit = function(e) {
+        e.preventDefault();
+
+        //获取input中的数据，匹配正则表达式
+        //这里分成两次匹配是为了分清输入手机号非法的原因是长度限制问题还是本身非法
+        var phone = document.getElementsByTagName("input")[0].value;
+        var regexp = /^\d{11}$/;
+        var resultP = regexp.test(phone);
+        
+        if(!resultP){
+          return function(){
+            document.getElementById("resultP").innerHTML = "手机号需要是11位数字";
+          }();
+        }
+
+        //在长度匹配成功后，判断输入手机号本身是否合法
+        regexp = /^1(3\d|4[579]|5[012356789]|7[0135678]|8\d)\d{8}$/;
+        resultP = regexp.test(phone);
+        if(!resultP){
+          return function(){
+            document.getElementById("resultP").innerHTML = "没有以" + phone.substr(0,3) + "开头的手机号";
+          }();
+        }
+
+        return function(){
+            document.getElementById("resultP").innerHTML = "输入正确，通过验证";
+        }();
+      };
+      
+
+      document.getElementById('repitition').onsubmit = function(e) {
+        e.preventDefault();
+
+        //获取输入的字符串
+        var str = document.getElementsByTagName("input")[2].value;
+
+        //以空格为界判断是否有重复相邻单词
+        var regexp = /\b([A-Za-z]+)\b\s+\1\b/;       
+        var resultR = regexp.test(str);
+
+        if(!resultR){
+          return function(){
+            document.getElementById("resultR").innerHTML = "false";
+          }();
+        }
+
+        return function(){
+          document.getElementById("resultR").innerHTML = "true";
+        }();
+      };
+     
+
+    </script>
+  </body>
+</html>
